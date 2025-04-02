@@ -1,0 +1,112 @@
+<div class="digital-card-container">
+  <div class="card">
+    <div class="card-header">
+      <h1>Digital Business Card</h1>
+      <p class="subtitle">Create and manage your digital business cards</p>
+    </div>
+
+    <div class="card-content">
+      <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" class="card-form">
+        <div class="form-group">
+          <label for="name">Full Name *</label>
+          <input 
+            type="text" 
+            id="name" 
+            formControlName="name" 
+            placeholder="Enter your full name"
+            [class.error]="cardForm.get('name')?.invalid && cardForm.get('name')?.touched">
+          <div class="error-message" *ngIf="cardForm.get('name')?.invalid && cardForm.get('name')?.touched">
+            Name is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="title">Professional Title</label>
+          <input 
+            type="text" 
+            id="title" 
+            formControlName="title" 
+            placeholder="e.g., Software Engineer">
+        </div>
+
+        <div class="form-group">
+          <label for="company">Company</label>
+          <input 
+            type="text" 
+            id="company" 
+            formControlName="company" 
+            placeholder="Enter company name">
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address *</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email" 
+            placeholder="Enter your email"
+            [class.error]="cardForm.get('email')?.invalid && cardForm.get('email')?.touched">
+          <div class="error-message" *ngIf="cardForm.get('email')?.invalid && cardForm.get('email')?.touched">
+            Please enter a valid email
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number *</label>
+          <input 
+            type="tel" 
+            id="phone" 
+            formControlName="phone" 
+            placeholder="Enter your phone number"
+            [class.error]="cardForm.get('phone')?.invalid && cardForm.get('phone')?.touched">
+          <div class="error-message" *ngIf="cardForm.get('phone')?.invalid && cardForm.get('phone')?.touched">
+            Phone number is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="website">Website</label>
+          <input 
+            type="url" 
+            id="website" 
+            formControlName="website" 
+            placeholder="Enter your website URL">
+        </div>
+
+        <div class="error-message" *ngIf="error">{{ error }}</div>
+
+        <button type="submit" [disabled]="cardForm.invalid || isLoading" class="generate-btn">
+          <span *ngIf="!isLoading">Create Card</span>
+          <span *ngIf="isLoading" class="loading">Creating...</span>
+        </button>
+      </form>
+
+      <div class="cards-section">
+        <h2>Your Cards</h2>
+        <div class="cards-grid">
+          <div *ngFor="let card of cards" class="card-item">
+            <div class="card-info">
+              <h3>{{ card.name }}</h3>
+              <p *ngIf="card.title">{{ card.title }}</p>
+              <p *ngIf="card.company">{{ card.company }}</p>
+              <p>{{ card.email }}</p>
+              <p>{{ card.phone }}</p>
+              <p *ngIf="card.website">{{ card.website }}</p>
+            </div>
+            <div class="card-actions">
+              <div class="qr-container">
+                <img [src]="card.qrCode" alt="QR Code" class="qr-code">
+                <div class="qr-overlay">
+                  <button (click)="downloadQRCode(card.qrCode, card.name)" class="download-btn">
+                    Download QR Code
+                  </button>
+                </div>
+              </div>
+              <button (click)="deleteCard(card._id)" class="delete-btn">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
